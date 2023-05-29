@@ -12,6 +12,7 @@ import App from './App.vue';
 import Signup from './components/Signup.vue';
 import Signin from './components/Signin.vue';
 import Home from './pages/Home.vue';
+import Dashboard from './pages/Dashboard.vue';
 
 // IMPORT COMPONENTS
 import Navbar from './components/Navbar.vue';
@@ -32,6 +33,18 @@ const routes = [
         path: '/signin',
         component: Signin,
         meta: { title: "Signin"}
+    },
+    {
+        path: '/dashboard',
+        component: Dashboard,
+        meta: {title: "Dashboard"},
+        beforeEnter: (to, from, next) => {
+            if (store.getters.getUser) {
+                next(); // Proceed to the dashboard route
+            } else {
+                next('/login'); // Redirect to the login route
+            }
+        },
     }
 ]
 
@@ -60,6 +73,7 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Store
 const store = useStore();
+console.log(store.getters.getUser)
 
 // CREATE VUE APP
 const vueApp = createApp(App);

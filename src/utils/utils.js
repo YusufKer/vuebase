@@ -1,3 +1,5 @@
+import { getAuth } from 'firebase/auth';
+
 export function validate(type,input){
     if(type === 'PASSWORD'){
         if(input.length === 0){
@@ -10,4 +12,8 @@ export function validate(type,input){
         }
         else return true;
     }
+}
+
+export function isAuthenticated(){
+    const auth = getAuth();
 }
