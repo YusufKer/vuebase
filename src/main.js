@@ -1,6 +1,11 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router';
+import { useStore } from './store.js';
+
+// IMPORT CSS
 import './style.css';
+
+// IMPORT ENTRY POINT
 import App from './App.vue';
 
 // IMPORT PAGES
@@ -52,6 +57,8 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+// Initialize Store
+const store = useStore();
 // CREATE VUE APP
 const vueApp = createApp(App);
 // REGISTER COMPONENTS 
@@ -59,5 +66,7 @@ vueApp.component("Navbar", Navbar);
 vueApp.component("Footer", Footer);
 // USE ROUTER
 vueApp.use(router);
+// USE STORE
+vueApp.use(store);
 // MOUNT APP
 vueApp.mount('#app')
