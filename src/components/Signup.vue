@@ -22,11 +22,8 @@
 
 <script setup>
     import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-    import { useStore } from 'vuex';
     import { ref } from "vue";
     import { validate } from "../utils/utils";
-
-    const store = useStore();
 
     const auth = getAuth();
 
@@ -40,7 +37,7 @@
         createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value)
             .then(userCredentials =>{
                 const user = userCredentials.user;
-                store.dispatch('signInUser', user);
+                console.log({message:"Sign up success",user});
             })
             .catch(error =>{
                 errorMessage.value = error.message;
