@@ -53,16 +53,7 @@ const routes = [
     {
         path: '/dashboard',
         component: Dashboard,
-        meta: {title: "Dashboard"},
-        beforeEnter: (to, from, next) => {
-            if (store.getters.getUser) {
-                next(); // Proceed to the dashboard route
-            } else {
-                console.log(store.getters.getUser)
-                alert("AUTH?")
-                next('/login'); // Redirect to the login route
-            }
-        },
+        meta: {title: "Dashboard"}
     }
 ]
 
