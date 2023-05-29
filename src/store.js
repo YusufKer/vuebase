@@ -4,24 +4,32 @@ const store = createStore({
     
     state(){
         return {
-            count: 0
+            count: 0,
+            user: null
         }
     },
 
     mutations: {
-        increment(state){
-            state.count ++;
+        increment(state, payload){
+            state.count += payload;
+        },
+        signInUser(state, payload){
+            state.user = payload;
         }
     },
 
     actions: {
-        increment(context){
-            context.commit('increment');
+        increment(context,payload){
+            context.commit('increment',payload);
+        },
+        signInUser(context,payload){
+            context.commit('signInUser',payload);
         }
     },
 
     getters: {
-        getCount: state => state.count
+        getCount: state => state.count,
+        getUser: state => state.user
     }
 })
 

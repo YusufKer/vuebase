@@ -1,5 +1,5 @@
 <template>
-    <form class="grid gap-6 p-4" @submit="submit">
+    <form @submit.prevent="submit" class="grid gap-6 p-4">
         <h2>Sign Up:</h2>
         <div class="grid gap-4">
             <label for="email">Email:</label>
@@ -22,7 +22,11 @@
 
 <script setup>
     import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-    import {ref, onMounted} from "vue";
+    import { useStore } from 'vuex';
+    import { ref } from "vue";
+    import { validate } from "../utils/utils";
+
+    const store = useStore();
 
     const auth = getAuth();
 
@@ -31,29 +35,15 @@
     const confirmPasswordInput = ref("");
     const errorMessage = ref("");
 
-
-    function submit(e){
-        e.preventDefault();
-        if(!validate()) return;
+    function submit(){
+        if(!validate('PASSWORD', passwordInput.value)) return;
         createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value)
             .then(userCredentials =>{
                 const user = userCredentials.user;
+                store.dispatch('signInUser', user);
             })
             .catch(error =>{
-                const errorCode = error.code;
                 errorMessage.value = error.message;
             })
     }
-
-    function validate(){
-        if(passwordInput.value !== confirmPasswordInput.value){
-            errorMessage.value = "Passwords do not match";
-            return false;
-        }
-        return true;
-    }
-
-    onMounted(()=>{
-        console.log("Mounted");
-    })
 </script>

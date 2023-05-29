@@ -57,16 +57,22 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
 // Initialize Store
 const store = useStore();
+
 // CREATE VUE APP
 const vueApp = createApp(App);
+
 // REGISTER COMPONENTS 
 vueApp.component("Navbar", Navbar);
 vueApp.component("Footer", Footer);
+
 // USE ROUTER
 vueApp.use(router);
+
 // USE STORE
 vueApp.use(store);
+
 // MOUNT APP
 vueApp.mount('#app')
