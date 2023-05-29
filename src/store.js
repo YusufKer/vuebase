@@ -4,8 +4,8 @@ const store = createStore({
     
     state(){
         return {
-            count: 0,
-            user: null
+            user: null,
+            count: 0
         }
     },
 

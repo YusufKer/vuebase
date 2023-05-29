@@ -18,6 +18,22 @@ import Dashboard from './pages/Dashboard.vue';
 import Navbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
 
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyC03RMV9JbJuR9uMB6DMshJGCAy6hckvdg",
+  authDomain: "vuebase-9d6ba.firebaseapp.com",
+  projectId: "vuebase-9d6ba",
+  storageBucket: "vuebase-9d6ba.appspot.com",
+  messagingSenderId: "150041959336",
+  appId: "1:150041959336:web:4c483da0fa4f3025e45b9d"
+};
+
+// DEFINE ROUTES
 const routes = [
     {
         path: '/',
@@ -42,6 +58,8 @@ const routes = [
             if (store.getters.getUser) {
                 next(); // Proceed to the dashboard route
             } else {
+                console.log(store.getters.getUser)
+                alert("AUTH?")
                 next('/login'); // Redirect to the login route
             }
         },
@@ -53,27 +71,11 @@ const router = createRouter({
     routes
 })
 
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyC03RMV9JbJuR9uMB6DMshJGCAy6hckvdg",
-  authDomain: "vuebase-9d6ba.firebaseapp.com",
-  projectId: "vuebase-9d6ba",
-  storageBucket: "vuebase-9d6ba.appspot.com",
-  messagingSenderId: "150041959336",
-  appId: "1:150041959336:web:4c483da0fa4f3025e45b9d"
-};
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
 // Initialize Store
 const store = useStore();
-console.log(store.getters.getUser)
 
 // CREATE VUE APP
 const vueApp = createApp(App);
