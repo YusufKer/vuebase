@@ -31,23 +31,23 @@
             <p class="text-2xl">Update profile picture:</p>
             <img class="w-full bg-red-50 aspect-square" src="" alt="Profile Picture"/>
             <input type="file" @change="handleFileChange">
-            <button @click="test">test</button>
+            <button @click="upload" class="bg-yellow-50 py-2 px-6 rounded-xl">upload</button>
         </div>
     </div>
 </template>
 
 <script setup>
-    import { getAuth, updateProfile, updateEmail, sendEmailVerification } from "firebase/auth"
-    import { getStorage, ref as firebaseRef } from 'firebase/storage';
+    import { getAuth, updateProfile, updateEmail, sendEmailVerification } from "firebase/auth";
+    import { getStorage, ref as firebaseRef, uploadBytes } from 'firebase/storage';
     import { ref } from 'vue';
 
     const auth = getAuth();
     const storage = getStorage();
-    const storageRef = firebaseRef(storage, "user-images");
 
     const displayNameInput = ref("");
     const emailInput = ref("");
     const phoneNumberInput = ref("");
+    let tempFile = null;
 
     const userInfo = {}
 
@@ -66,6 +66,7 @@
                 console.log(error);
             })
     }
+
     function updateUserEmail(){
         if(emailInput.value === ""){
             console.log("Email empty")
@@ -79,6 +80,7 @@
                 console.log(error)
             })
     }
+
     async function verifyEmail(){
         sendEmailVerification(auth.currentUser)
             .then(() =>{
@@ -88,13 +90,26 @@
                 console.log(error);
             })
     }
+
     function handleFileChange(e){
-        console.log("change")
-        console.log(e.target.files[0])
+        tempFile = e.target.files[0]
+        const storageRef = firebaseRef(storage, `user-images/${auth.currentUser.uid}_${e.target.files[0].name}`);
     }
 
-    function test(){
-        console.log(storageRef)
-
+    /*
+        [ ] add functionality to add file to storage
+        [ ] add loading function to prevent user from leaving until file is uploaded
+        [ ] get url to that file
+        [ ] update the userInfo profile photo url to point to that file
+    */ 
+    async function upload(){
+        const storageRef = firebaseRef(storage, `user-images/${auth.currentUser.uid}_${tempFile.name}`);
+        uploadBytes(storageRef, tempFile)
+            .then(()=>{
+                console.log("Upload success...");
+            })
+            .catch(error =>{
+                console.log(error);
+            })
     }
 </script>
