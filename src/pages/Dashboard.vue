@@ -1,8 +1,8 @@
 <template>
     <div class="p-4 grid grid-cols-2 gap-6">
         <div class="grid gap-6">
+            <p class="text-2xl">Update Info:</p>
             <form @submit.prevent="updateUserDisplayName" class="grid gap-4">
-                <p class="text-2xl">Update Info:</p>
                 <div class="grid gap-4">
                     <label for="display-name">Display name:</label>
                     <input v-model="displayNameInput" id="display-name" type="text">
@@ -21,7 +21,6 @@
                 </div>
             </form>
             <form @submit.prevent class="grid gap-4">
-                <p class="text-2xl">Update Email:</p>
                 <div class="grid gap-4">
                     <label for="email">Email:</label>
                     <input v-model="emailInput" id="email" type="email">
@@ -44,6 +43,10 @@
 </template>
 
 <script setup>
+    /*
+        ISSUES TO SOLVE
+        [ ] user data (coming from the vue store) is initialised as null. The component renders before user state is loaded
+    */ 
     import { getAuth, updateProfile, updateEmail, sendEmailVerification, updatePhoneNumber } from "firebase/auth";
     import { getStorage, ref as firebaseRef, uploadBytes, getDownloadURL } from 'firebase/storage';
     import { useStore } from "vuex";
@@ -83,13 +86,19 @@
                 store.dispatch("hideLoader");
             })
     }
+    /*
+        TODO:
+        [ ] send OTP to users phone number
+        [ ] have user enter OTP - Obtain linkToIdToken
+        [ ] enter linkToIdToken as second parameter in updatePhoneNumber function call
+    */
     async function updateUserPhoneNumber(){
         console.log("CLICKED...")
         if(phoneNumberInput.value === "") return;
         store.dispatch("showLoader");
         console.log(updatePhoneNumber)
         console.log(auth.currentUser)
-        updatePhoneNumber(auth.currentUser, phoneNumberInput.value)
+        updatePhoneNumber(auth.currentUser, /* linkToIdToken */)
             .then(()=>{
                 console.log("worked")
             })
@@ -138,6 +147,7 @@
     }
 
     /*
+        TODO:
         [x] add functionality to add file to storage
         [x] add loading function to prevent user from leaving until file is uploaded or fails
         [x] get url to that file
