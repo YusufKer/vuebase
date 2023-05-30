@@ -2,6 +2,19 @@ import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router';
 import { useStore } from './store.js';
 
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getStorage } from "firebase/storage";
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyC03RMV9JbJuR9uMB6DMshJGCAy6hckvdg",
+  authDomain: "vuebase-9d6ba.firebaseapp.com",
+  projectId: "vuebase-9d6ba",
+  storageBucket: "vuebase-9d6ba.appspot.com",
+  messagingSenderId: "150041959336",
+  appId: "1:150041959336:web:4c483da0fa4f3025e45b9d"
+};
+
 // IMPORT CSS
 import './style.css';
 
@@ -13,27 +26,13 @@ import Signup from './components/Signup.vue';
 import Signin from './components/Signin.vue';
 import Home from './pages/Home.vue';
 import Dashboard from './pages/Dashboard.vue';
+import AboutUs from './pages/AboutUs.vue';
+import ContactUs from './pages/ContactUs.vue';
 
 // IMPORT COMPONENTS
 import Navbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
 import Loader from './components/Loader.vue';
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getStorage } from "firebase/storage";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyC03RMV9JbJuR9uMB6DMshJGCAy6hckvdg",
-  authDomain: "vuebase-9d6ba.firebaseapp.com",
-  projectId: "vuebase-9d6ba",
-  storageBucket: "vuebase-9d6ba.appspot.com",
-  messagingSenderId: "150041959336",
-  appId: "1:150041959336:web:4c483da0fa4f3025e45b9d"
-};
 
 // DEFINE ROUTES
 const routes = [
@@ -56,6 +55,16 @@ const routes = [
         path: '/dashboard',
         component: Dashboard,
         meta: {title: "Dashboard"}
+    },
+    {
+        path: '/about-us',
+        component: AboutUs,
+        meta: {title: "About us"}
+    },
+    {
+        path: '/contact-us',
+        component: ContactUs,
+        meta: {title: "Contact us"}
     }
 ]
 

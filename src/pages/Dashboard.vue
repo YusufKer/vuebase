@@ -1,12 +1,17 @@
 <template>
     <div class="p-4 grid grid-cols-2 gap-6">
         <div class="grid gap-6">
-            <form @submit.prevent="updateUserInfo" class="grid gap-4">
+            <form @submit.prevent="updateUserDisplayName" class="grid gap-4">
                 <p class="text-2xl">Update Info:</p>
                 <div class="grid gap-4">
                     <label for="display-name">Display name:</label>
                     <input v-model="displayNameInput" id="display-name" type="text">
                 </div>
+                <div>
+                    <button type="submit" class="bg-yellow-50 py-2 px-6 rounded-xl">Update</button>
+                </div>
+            </form>
+            <form @submit.prevent="updateUserPhoneNumber" class="grid gap-4">
                 <div class="grid gap-4">
                     <label for="phone-number">Phone number:</label>
                     <input v-model="phoneNumberInput" id="phone-number" type="tel">
@@ -29,7 +34,7 @@
         </div>
         <div class="bg-purple-50">
             <p class="text-2xl">Update profile picture:</p>
-            <img class="w-full max-w-[500px] bg-red-50 aspect-square" :src="store.state.user.photoURL && store.state.user.photoURL" alt="Profile Picture"/>
+            <img class="w-full max-w-[500px] bg-red-50 aspect-square" :src="profileImageSrc || store.state.user.photoURL" alt="Profile Picture"/>
             <div class="flex gap-4 items-center">
                 <input type="file" @change="handleFileChange">
                 <button @click="upload" class="bg-yellow-50 py-2 px-6 rounded-xl">upload</button>
@@ -39,7 +44,7 @@
 </template>
 
 <script setup>
-    import { getAuth, updateProfile, updateEmail, sendEmailVerification } from "firebase/auth";
+    import { getAuth, updateProfile, updateEmail, sendEmailVerification, updatePhoneNumber } from "firebase/auth";
     import { getStorage, ref as firebaseRef, uploadBytes, getDownloadURL } from 'firebase/storage';
     import { useStore } from "vuex";
     // MOUNTED TO BE REMOVED
@@ -61,21 +66,38 @@
     //     },2000)
     // })
 
-    const userInfo = {}
-
-    async function updateUserInfo(){
+    async function updateUserDisplayName(){
+        const userInfo = {}
         if(displayNameInput.value !== ""){
             userInfo.displayName = displayNameInput.value;
         }
-        if(phoneNumberInput.value !== ""){
-            userInfo.phoneNumber = phoneNumberInput.value;
-        }
+        store.dispatch("showLoader");
         updateProfile(auth.currentUser,userInfo)
             .then(() =>{
-                console.log("Profile Updated")
+                console.log("Profile Updated");
             })
             .catch(error => {
                 console.log(error);
+            })
+            .finally(() =>{
+                store.dispatch("hideLoader");
+            })
+    }
+    async function updateUserPhoneNumber(){
+        console.log("CLICKED...")
+        if(phoneNumberInput.value === "") return;
+        store.dispatch("showLoader");
+        console.log(updatePhoneNumber)
+        console.log(auth.currentUser)
+        updatePhoneNumber(auth.currentUser, phoneNumberInput.value)
+            .then(()=>{
+                console.log("worked")
+            })
+            .catch(error =>{
+                console.log(error)
+            })
+            .finally(()=>{
+                store.dispatch("hideLoader");
             })
     }
 
@@ -84,6 +106,7 @@
             console.log("Email empty")
             return;
         }
+        store.dispatch("showLoader");
         updateEmail(auth.currentUser, emailInput.value)
             .then(() =>{
                 console.log("Email Updated")
@@ -91,9 +114,13 @@
             .catch(error =>{
                 console.log(error)
             })
+            .finally(()=>{
+                store.dispatch("hideLoader");
+            })
     }
 
     async function verifyEmail(){
+        store.dispatch("showLoader");
         sendEmailVerification(auth.currentUser)
             .then(() =>{
                 console.log("Verification email sent")
@@ -101,11 +128,13 @@
             .catch(error =>{
                 console.log(error);
             })
+            .finally(() =>{
+                store.dispatch("hideLoader");
+            })
     }
 
     function handleFileChange(e){
         tempFile = e.target.files[0]
-        const storageRef = firebaseRef(storage, `user-images/${auth.currentUser.uid}_${e.target.files[0].name}`);
     }
 
     /*
@@ -128,9 +157,9 @@
             await updateProfile(auth.currentUser,{photoURL:url});
             profileImageSrc.value = url;
             console.log("Profile Updated");
-            store.dispatch("hideLoader");
         }catch(error){
             console.log(error);
+        }finally{
             store.dispatch("hideLoader");
         }
     }
