@@ -1,5 +1,6 @@
 <template>
-  <div class="container bg-blue-50">
+  <div class="container bg-blue-50 relative">
+    <Loader/>
     <Navbar/>
     <router-view></router-view>
     <div @click="$store.dispatch('increment',12)">TEST VUEX</div>

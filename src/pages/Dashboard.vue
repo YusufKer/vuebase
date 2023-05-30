@@ -29,7 +29,7 @@
         </div>
         <div class="bg-purple-50">
             <p class="text-2xl">Update profile picture:</p>
-            <img class="w-full bg-red-50 aspect-square" src="" alt="Profile Picture"/>
+            <img class="w-full bg-red-50 aspect-square" :src="profileImageSrc" alt="Profile Picture"/>
             <input type="file" @change="handleFileChange">
             <button @click="upload" class="bg-yellow-50 py-2 px-6 rounded-xl">upload</button>
         </div>
@@ -38,16 +38,24 @@
 
 <script setup>
     import { getAuth, updateProfile, updateEmail, sendEmailVerification } from "firebase/auth";
-    import { getStorage, ref as firebaseRef, uploadBytes } from 'firebase/storage';
-    import { ref } from 'vue';
+    import { getStorage, ref as firebaseRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+    import { useStore } from "vuex";
+    // MOUNTED TO BE REMOVED
+    import { ref, onMounted } from 'vue';
 
     const auth = getAuth();
     const storage = getStorage();
+    const store = useStore();
 
     const displayNameInput = ref("");
     const emailInput = ref("");
     const phoneNumberInput = ref("");
+    const profileImageSrc = ref("");
     let tempFile = null;
+
+    // onMounted(()=>{
+    //     profileImageSrc.value = store.state.user.photoURL;
+    // })
 
     const userInfo = {}
 
@@ -97,19 +105,29 @@
     }
 
     /*
-        [ ] add functionality to add file to storage
-        [ ] add loading function to prevent user from leaving until file is uploaded
-        [ ] get url to that file
-        [ ] update the userInfo profile photo url to point to that file
-    */ 
+        [x] add functionality to add file to storage
+        [x] add loading function to prevent user from leaving until file is uploaded or fails
+        [x] get url to that file
+        [x] update the userInfo profile photo url to point to that file
+    */
+
     async function upload(){
-        const storageRef = firebaseRef(storage, `user-images/${auth.currentUser.uid}_${tempFile.name}`);
-        uploadBytes(storageRef, tempFile)
-            .then(()=>{
-                console.log("Upload success...");
-            })
-            .catch(error =>{
-                console.log(error);
-            })
+        if(!tempFile){
+            console.log("No file selected...");
+            return;
+        }
+        store.dispatch("showLoader");
+        const storageRef = firebaseRef(storage, `user-images/${auth.currentUser.uid}.${tempFile.name.split(".")[1]}`);
+        try{
+            await uploadBytes(storageRef, tempFile);
+            const url = await getDownloadURL(storageRef);
+            await updateProfile(auth.currentUser,{photoURL:url});
+            profileImageSrc.value = url;
+            console.log("Profile Updated");
+            store.dispatch("hideLoader");
+        }catch(error){
+            console.log(error);
+            store.dispatch("hideLoader");
+        }
     }
 </script>

@@ -5,7 +5,8 @@ const store = createStore({
     state(){
         return {
             user: null,
-            count: 0
+            count: 0,
+            loading: false
         }
     },
 
@@ -15,6 +16,9 @@ const store = createStore({
         },
         signInUser(state, payload){
             state.user = payload;
+        },
+        setLoading(state, payload){
+            state.loading = payload;
         }
     },
 
@@ -24,6 +28,12 @@ const store = createStore({
         },
         signInUser(context,payload){
             context.commit('signInUser',payload);
+        },
+        showLoader(context){
+            context.commit('setLoading', true);
+        },
+        hideLoader(context){
+            context.commit('setLoading', false);
         }
     },
 

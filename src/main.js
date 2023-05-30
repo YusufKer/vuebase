@@ -17,6 +17,7 @@ import Dashboard from './pages/Dashboard.vue';
 // IMPORT COMPONENTS
 import Navbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
+import Loader from './components/Loader.vue';
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
@@ -76,6 +77,7 @@ const vueApp = createApp(App);
 // REGISTER COMPONENTS 
 vueApp.component("Navbar", Navbar);
 vueApp.component("Footer", Footer);
+vueApp.component("Loader", Loader);
 
 // USE ROUTER
 vueApp.use(router);
