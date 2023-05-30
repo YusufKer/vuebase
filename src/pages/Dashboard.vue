@@ -21,7 +21,7 @@
                     <label for="email">Email:</label>
                     <input v-model="emailInput" id="email" type="email">
                 </div>
-                <div class="flex gap-4">
+                <div class="flex gap-4 h-min">
                     <button @click="updateUserEmail" class="bg-yellow-50 py-2 px-6 rounded-xl">Update</button>
                     <button @click="verifyEmail" class="bg-yellow-50 py-2 px-6 rounded-xl">Verify email</button>
                 </div>
@@ -29,9 +29,11 @@
         </div>
         <div class="bg-purple-50">
             <p class="text-2xl">Update profile picture:</p>
-            <img class="w-full bg-red-50 aspect-square" :src="profileImageSrc" alt="Profile Picture"/>
-            <input type="file" @change="handleFileChange">
-            <button @click="upload" class="bg-yellow-50 py-2 px-6 rounded-xl">upload</button>
+            <img class="w-full max-w-[500px] bg-red-50 aspect-square" :src="store.state.user.photoURL && store.state.user.photoURL" alt="Profile Picture"/>
+            <div class="flex gap-4 items-center">
+                <input type="file" @change="handleFileChange">
+                <button @click="upload" class="bg-yellow-50 py-2 px-6 rounded-xl">upload</button>
+            </div>
         </div>
     </div>
 </template>
@@ -54,7 +56,9 @@
     let tempFile = null;
 
     // onMounted(()=>{
-    //     profileImageSrc.value = store.state.user.photoURL;
+    //     setTimeout(()=>{
+    //         // profileImageSrc.value = store.state.user.photoURL;
+    //     },2000)
     // })
 
     const userInfo = {}

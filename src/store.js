@@ -5,15 +5,11 @@ const store = createStore({
     state(){
         return {
             user: null,
-            count: 0,
             loading: false
         }
     },
 
     mutations: {
-        increment(state, payload){
-            state.count += payload;
-        },
         signInUser(state, payload){
             state.user = payload;
         },
@@ -23,9 +19,6 @@ const store = createStore({
     },
 
     actions: {
-        increment(context,payload){
-            context.commit('increment',payload);
-        },
         signInUser(context,payload){
             context.commit('signInUser',payload);
         },

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="store.state.loading" class="w-screen h-screen z-10 bg-yellow-50 sticky top-0 flex justify-center items-center">
+    <div v-if="store.state.loading" class="w-screen h-screen z-10 bg-yellow-50 sticky top-0 left-0 flex justify-center items-center">
         <h1>LOADING</h1>
     </div>
 </template>
