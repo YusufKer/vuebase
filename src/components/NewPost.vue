@@ -26,7 +26,7 @@
             }
     */ 
 
-    import { ref, onMounted } from 'vue';
+    import { ref } from 'vue';
     import { useStore } from 'vuex';
     import { getAuth } from 'firebase/auth';
     import { getStorage, ref as firebaseRef, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -40,12 +40,6 @@
     const tempFile = ref(null);
     const imageUrl = ref("");
     const errorText = ref("");
-
-    const post = ref({test:'testing'});
-
-    // onMounted(()=>{
-    //     console.log(tempFile.value);
-    // })
 
     function handleImageChange(e){
         if(!e.target.files) return;
@@ -77,23 +71,21 @@
 
     async function handleSubmit(){
         try{
+            const post = {};
             store.dispatch("showLoader");
             await uploadImage();
-            // console.log(imageUrl.value === "")
-            // console.log(textInput.value)
-            // post.value.imageUrl = imageUrl.value;
-            // post.value.textContent = textInput.value;
-            if(!imageUrl.value === ""){
-                post.value.imageUrl = imageUrl.value;
+            if(imageUrl.value !== ""){
+                post.imageUrl = imageUrl.value;
                 console.log("URL not empty");
             }
-            if(!textInput.value === ""){
-                post.value.textContent = textInput.value;
+            if(textInput.value !== ""){
+                post.textContent = textInput.value;
                 console.log("text content not empty");
             }
-            console.table({...post.value})
-            console.log(imageUrl.value);
-            console.log(textInput.value);
+            if(Object.keys(post).length > 0){
+                post.comments = [];
+            }
+            console.table(post)
         }catch(error){
             console.log(error)
         }finally{
