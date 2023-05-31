@@ -1,9 +1,11 @@
 <template>
     <form @submit.prevent="handleSubmit" class="grid gap-4 max-w-[500px]">
-        <img :src="imageSrc" alt="">
+        <img class="max-w-full" :src="imageSrc" alt="">
         <input @change="handleImageChange" type="file">
-        <textarea v-model="textInput" name="" id="" cols="30" rows="10"></textarea>
+        <textarea class="p-4" v-model="textInput" name="" id="" cols="30" rows="10"></textarea>
         <button type="submit" class="bg-yellow-50 py-2 px-6 rounded-xl">Post</button>
+        <p class="bg-red-100">{{ errorText }}</p>
+        <p>{{ post }}</p>
     </form>
 </template>
 
@@ -12,10 +14,10 @@
     /*
         TODO:
         [x] display image before upload
-        [ ] upload image to firebase storage
-        [ ] get imageUrl of uploaded image
+        [x] upload image to firebase storage
+        [x] get imageUrl of uploaded image
         [ ] upload an object to cloud firestore
-            - object to contain:
+            object to contain:
             {
                 date: firebase date,
                 text_content: string,
@@ -32,15 +34,18 @@
     const storage = getStorage();
     const auth = getAuth();
     const store = useStore();
-    
+
     const imageSrc = ref("");
     const textInput = ref("");
     const tempFile = ref(null);
     const imageUrl = ref("");
+    const errorText = ref("");
 
-    onMounted(()=>{
-        console.log(tempFile.value);
-    })
+    const post = ref({test:'testing'});
+
+    // onMounted(()=>{
+    //     console.log(tempFile.value);
+    // })
 
     function handleImageChange(e){
         if(!e.target.files) return;
@@ -52,22 +57,21 @@
                 imageSrc.value = fr.result;
             }
             fr.readAsDataURL(e.target.files[0]);
+            tempFile.value = e.target.files[0];
+        }else{
+            errorText.value = "File reader not supported on this browser. Please use a different browser."
         }
     }
+
     async function uploadImage(){
-        if(!tempFile){
-            console.log("No image Selected...");
-            return;
-        }
-        const storageRef = firebaseRef(storage, `posts/${auth.currentUser.uid}/${tempFile.name}`);
+        if(!tempFile.value) return;
+        const storageRef = firebaseRef(storage, `posts/${auth.currentUser.uid}/${tempFile.value.name}`);
         try{
             await uploadBytes(storageRef, tempFile);
             const url = await getDownloadURL(storageRef);
             imageUrl.value = url;
-            console.log("Image uploaded...");
         }catch(error){
             console.log(error);
-        }finally{
         }
     }
 
@@ -75,13 +79,19 @@
         try{
             store.dispatch("showLoader");
             await uploadImage();
-            const post = {};
+            // console.log(imageUrl.value === "")
+            // console.log(textInput.value)
+            // post.value.imageUrl = imageUrl.value;
+            // post.value.textContent = textInput.value;
             if(!imageUrl.value === ""){
-                post.imageUrl = imageUrl.value;
+                post.value.imageUrl = imageUrl.value;
+                console.log("URL not empty");
             }
             if(!textInput.value === ""){
-                post.textContent === textInput.value;
+                post.value.textContent = textInput.value;
+                console.log("text content not empty");
             }
+            console.table({...post.value})
             console.log(imageUrl.value);
             console.log(textInput.value);
         }catch(error){
