@@ -44,7 +44,7 @@
 
     function handleImageChange(e){
         if(!e.target.files) return;
-        tempFile.value = e.target.files;
+        tempFile.value = e.target.files[0];
         // CHECK THAT FILE READER IS SUPPORTED
         if(FileReader){
             const fr = new FileReader();
