@@ -112,6 +112,7 @@
     */
 
     function handleFileChange(e){
+        if(!e.target.files) return;
         tempFile = e.target.files[0];
         // profileImageSrc
         if(FileReader){

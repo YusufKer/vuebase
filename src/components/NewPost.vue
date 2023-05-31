@@ -1,8 +1,8 @@
 <template>
-    <form @submit.prevent class="grid gap-4 max-w-[500px]">
+    <form @submit.prevent="handleSubmit" class="grid gap-4 max-w-[500px]">
         <img :src="imageSrc" alt="">
         <input @change="handleImageChange" type="file">
-        <textarea name="" id="" cols="30" rows="10"></textarea>
+        <textarea v-model="textInput" name="" id="" cols="30" rows="10"></textarea>
         <button type="submit" class="bg-yellow-50 py-2 px-6 rounded-xl">Post</button>
     </form>
 </template>
@@ -24,15 +24,23 @@
             }
     */ 
 
-    import { ref } from 'vue';
+    import { ref, onMounted } from 'vue';
+    import { useStore } from 'vuex';
     import { getAuth } from 'firebase/auth';
     import { getStorage, ref as firebaseRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 
     const storage = getStorage();
     const auth = getAuth();
+    const store = useStore();
     
     const imageSrc = ref("");
+    const textInput = ref("");
     const tempFile = ref(null);
+    const imageUrl = ref("");
+
+    onMounted(()=>{
+        console.log(tempFile.value);
+    })
 
     function handleImageChange(e){
         if(!e.target.files) return;
@@ -49,7 +57,37 @@
     async function uploadImage(){
         if(!tempFile){
             console.log("No image Selected...");
+            return;
         }
         const storageRef = firebaseRef(storage, `posts/${auth.currentUser.uid}/${tempFile.name}`);
+        try{
+            await uploadBytes(storageRef, tempFile);
+            const url = await getDownloadURL(storageRef);
+            imageUrl.value = url;
+            console.log("Image uploaded...");
+        }catch(error){
+            console.log(error);
+        }finally{
+        }
+    }
+
+    async function handleSubmit(){
+        try{
+            store.dispatch("showLoader");
+            await uploadImage();
+            const post = {};
+            if(!imageUrl.value === ""){
+                post.imageUrl = imageUrl.value;
+            }
+            if(!textInput.value === ""){
+                post.textContent === textInput.value;
+            }
+            console.log(imageUrl.value);
+            console.log(textInput.value);
+        }catch(error){
+            console.log(error)
+        }finally{
+            store.dispatch("hideLoader");
+        }
     }
 </script>
