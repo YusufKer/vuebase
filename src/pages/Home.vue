@@ -1,9 +1,15 @@
 <template>
-    <div>
-        This is my home page
+    <div v-if="store.state.user" class="p-4">
+        <NewPost/>
+    </div>
+    <div v-else class="p-4">
+        <p>Please log in</p>
     </div>
 </template>
 
-<script>
+<script setup>
+    import { useStore } from "vuex";
+
+    const store = useStore();
 
 </script>

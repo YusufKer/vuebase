@@ -21,11 +21,21 @@
 </template>
 
 <script setup>
+    
+    /*
+        TODO: 
+        [ ] password and confirm password validation to be written
+    */ 
+
+    import { useStore } from 'vuex';
+    import { useRouter } from 'vue-router';
     import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
     import { ref } from "vue";
     import { validate } from "../utils/utils";
 
+    const store = useStore();
     const auth = getAuth();
+    const router = useRouter();
 
     const emailInput = ref("");
     const passwordInput = ref("");
@@ -34,13 +44,17 @@
 
     function submit(){
         if(!validate('PASSWORD', passwordInput.value)) return;
+        store.dispatch("showLoader")
         createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value)
             .then(userCredentials =>{
                 const user = userCredentials.user;
-                console.log({message:"Sign up success",user});
+                router.push("/");
             })
             .catch(error =>{
                 errorMessage.value = error.message;
+            })
+            .finally(() =>{
+                store.dispatch("hideLoader");
             })
     }
 </script>

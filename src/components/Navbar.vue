@@ -3,7 +3,7 @@
         <div class="flex gap-4">
             <router-link to="/">Home</router-link>
             <template v-if="store.state.user">
-                <router-link to="/dashboard">Dashboard</router-link>
+                <router-link to="/profile">Profile</router-link>
             </template>
         </div>
         
@@ -22,19 +22,26 @@
 </template>
 
 <script setup>
+    import { useRouter } from 'vue-router';
     import { getAuth, signOut } from 'firebase/auth';
     import { useStore } from 'vuex';
     
     const store = useStore();
     const auth = getAuth();
+    const router = useRouter();
 
     async function signout(){
+        store.dispatch("showLoader");
         signOut(auth)
             .then(() =>{
                 console.log("Signout successfull");
+                router.push("/");
             })
             .catch(error =>{
                 console.log(error);
+            })
+            .finally(()=>{
+                store.dispatch("hideLoader");
             })
     }
 

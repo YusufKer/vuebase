@@ -17,25 +17,34 @@
 </template>
 
 <script setup>
+    import { useRouter } from 'vue-router';
     import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'; 
+    import { useStore } from 'vuex';
     import { ref } from 'vue';
     import { validate } from '../utils/utils';
+
+    const auth = getAuth();
+    const router = useRouter();
+    const store = useStore();
 
     const emailInput = ref('');
     const passwordInput = ref('');
     const errorMessage = ref('');
 
-    const auth = getAuth();
 
     function submit(){
         if(!validate('PASSWORD', passwordInput.value)) return;
+        store.dispatch("showLoader");
         signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value)
             .then(userCredential =>{
                 const user = userCredential.user;
-                console.log({message:"Sign in success",user});
+                router.push("/");
             })
             .catch(error =>{
                 errorMessage.value = error.message;
+            })
+            .finally(()=>{
+                store.dispatch("hideLoader");
             })
     }
 </script>

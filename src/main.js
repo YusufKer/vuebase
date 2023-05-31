@@ -25,7 +25,7 @@ import App from './App.vue';
 import Signup from './components/Signup.vue';
 import Signin from './components/Signin.vue';
 import Home from './pages/Home.vue';
-import Dashboard from './pages/Dashboard.vue';
+import Profile from './pages/Profile.vue';
 import AboutUs from './pages/AboutUs.vue';
 import ContactUs from './pages/ContactUs.vue';
 
@@ -33,6 +33,7 @@ import ContactUs from './pages/ContactUs.vue';
 import Navbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
 import Loader from './components/Loader.vue';
+import NewPost from './components/NewPost.vue';
 
 // DEFINE ROUTES
 const routes = [
@@ -52,9 +53,9 @@ const routes = [
         meta: { title: "Signin"}
     },
     {
-        path: '/dashboard',
-        component: Dashboard,
-        meta: {title: "Dashboard"}
+        path: '/profile',
+        component: Profile,
+        meta: {title: "Profile"}
     },
     {
         path: '/about-us',
@@ -87,6 +88,7 @@ const vueApp = createApp(App);
 vueApp.component("Navbar", Navbar);
 vueApp.component("Footer", Footer);
 vueApp.component("Loader", Loader);
+vueApp.component("NewPost", NewPost);
 
 // USE ROUTER
 vueApp.use(router);
