@@ -1,19 +1,7 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router';
 import { useStore } from './store.js';
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getStorage } from "firebase/storage";
-// Firebase Configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyC03RMV9JbJuR9uMB6DMshJGCAy6hckvdg",
-  authDomain: "vuebase-9d6ba.firebaseapp.com",
-  projectId: "vuebase-9d6ba",
-  storageBucket: "vuebase-9d6ba.appspot.com",
-  messagingSenderId: "150041959336",
-  appId: "1:150041959336:web:4c483da0fa4f3025e45b9d"
-};
+import './firebase.js'
 
 // IMPORT CSS
 import './style.css';
@@ -74,10 +62,6 @@ const router = createRouter({
     routes
 })
 
-// Initialize Firebase + Storage
-const app = initializeApp(firebaseConfig);
-const storage = getStorage(app);
-
 // Initialize Store
 const store = useStore();
 
@@ -90,10 +74,8 @@ vueApp.component("Footer", Footer);
 vueApp.component("Loader", Loader);
 vueApp.component("NewPost", NewPost);
 
-// USE ROUTER
+// USE ROUTER, STORE
 vueApp.use(router);
-
-// USE STORE
 vueApp.use(store);
 
 // MOUNT APP

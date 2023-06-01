@@ -6,6 +6,7 @@
         <button type="submit" class="bg-yellow-50 py-2 px-6 rounded-xl">Post</button>
         <p class="bg-red-100">{{ errorText }}</p>
         <p>{{ post }}</p>
+        <button @click.prevent="testing">test post</button>
     </form>
 </template>
 
@@ -16,7 +17,11 @@
         [x] display image before upload
         [x] upload image to firebase storage
         [x] get imageUrl of uploaded image
-        [ ] upload an object to cloud firestore
+        [ ] build opbject {
+                text,
+                imageUrl,
+                comments
+            }
             object to contain:
             {
                 date: firebase date,
@@ -26,10 +31,29 @@
             }
     */ 
 
-    import { ref } from 'vue';
+    import { ref, onMounted } from 'vue';
     import { useStore } from 'vuex';
     import { getAuth } from 'firebase/auth';
     import { getStorage, ref as firebaseRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+    import { collection, addDoc } from "firebase/firestore";
+    import { db } from "../firebase.js";
+
+    async function testing(){
+        console.log(db)
+        console.log(collection);
+        console.log(addDoc);
+        try{
+            const docRef = await addDoc(collection(db, "posts"), {
+                first: "Ada",
+                last: "Lovelace",
+                born: 1815
+            });
+            console.log("Document written with ID: ", docRef.id);
+            console.log("Works")
+        }catch(error){
+            console.log(error)
+        }
+    }
 
     const storage = getStorage();
     const auth = getAuth();
