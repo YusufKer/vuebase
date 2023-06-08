@@ -9,7 +9,6 @@
 </template>
 
 <script setup>
-
     /*
         TODO:
         [x] display image before upload
@@ -25,7 +24,6 @@
         [ ] error responses to be mapped to error messages
     
     */ 
-
     import { ref } from 'vue';
     import { useStore } from 'vuex';
     import { getAuth } from 'firebase/auth';
@@ -65,6 +63,7 @@
             await uploadBytes(storageRef, tempFile);
             const url = await getDownloadURL(storageRef);
             imageUrl.value = url;
+            console.log({downloadUrl:url})
         }catch(error){
             console.log(error);
         }
@@ -83,7 +82,7 @@
                 post.textContent = textInput.value;
                 console.log("text content not empty");
             }
-            // CHECK THAT POST IS NOT AN EMPTY ONJECT
+            // CHECK THAT POST IS NOT AN EMPTY OBJECT
             if(Object.keys(post).length === 0){
                 throw {message:"Post empty"};
             }

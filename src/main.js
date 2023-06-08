@@ -22,7 +22,8 @@ import Navbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
 import Loader from './components/Loader.vue';
 import NewPost from './components/NewPost.vue';
-import Posts from './components/Posts.vue';
+import PostListing from './components/PostListing.vue';
+import Post from './components/Post.vue';
 
 // DEFINE ROUTES
 const routes = [
@@ -74,7 +75,8 @@ vueApp.component("Navbar", Navbar);
 vueApp.component("Footer", Footer);
 vueApp.component("Loader", Loader);
 vueApp.component("NewPost", NewPost);
-vueApp.component("Posts", Posts);
+vueApp.component("PostListing", PostListing);
+vueApp.component("Post", Post);
 
 // USE ROUTER, STORE
 vueApp.use(router);
