@@ -1,6 +1,8 @@
 <template>
     <div v-if="store.state.user" class="p-4">
         <NewPost/>
+        <br>
+        <Posts/>
     </div>
     <div v-else class="p-4">
         <p>Please log in</p>

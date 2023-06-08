@@ -35,7 +35,14 @@
 
 <script setup>
     /*
-        ISSUES TO SOLVE
+        TODO:
+        [x] add functionality to display uploaded file
+        [x] add functionality to add file to storage
+        [x] add loading function to prevent user from leaving until file is uploaded or fails
+        [x] get url to that file
+        [x] update the userInfo profile photo url to point to that file
+ 
+        ISSUES TO SOLVE:
         [ ] user data (coming from the vue store) is initialised as null. The component renders before user state is loaded
     */ 
     import { getAuth, updateProfile, updateEmail, sendEmailVerification, updatePhoneNumber } from "firebase/auth";
@@ -101,15 +108,6 @@
                 store.dispatch("hideLoader");
             })
     }
-
-    /*
-        TODO:
-        [x] add functionality to display uploaded file
-        [x] add functionality to add file to storage
-        [x] add loading function to prevent user from leaving until file is uploaded or fails
-        [x] get url to that file
-        [x] update the userInfo profile photo url to point to that file
-    */
 
     function handleFileChange(e){
         if(!e.target.files) return;

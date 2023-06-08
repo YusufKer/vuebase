@@ -4,12 +4,12 @@ import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
 // Firebase Configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyC03RMV9JbJuR9uMB6DMshJGCAy6hckvdg",
-  authDomain: "vuebase-9d6ba.firebaseapp.com",
-  projectId: "vuebase-9d6ba",
-  storageBucket: "vuebase-9d6ba.appspot.com",
-  messagingSenderId: "150041959336",
-  appId: "1:150041959336:web:4c483da0fa4f3025e45b9d"
+  apiKey: "AIzaSyDigzwwyW9Xie64Do7jwdzsKmMg2oBoG_U",
+  authDomain: "vuebase-23b35.firebaseapp.com",
+  projectId: "vuebase-23b35",
+  storageBucket: "vuebase-23b35.appspot.com",
+  messagingSenderId: "960045387006",
+  appId: "1:960045387006:web:dc1bfbb2baff4465d469af"
 };
 
 // Initialize Firebase + Storage + firestore

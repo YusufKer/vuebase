@@ -5,8 +5,6 @@
         <textarea class="p-4" v-model="textInput" name="" id="" cols="30" rows="10"></textarea>
         <button type="submit" class="bg-yellow-50 py-2 px-6 rounded-xl">Post</button>
         <p class="bg-red-100">{{ errorText }}</p>
-        <p>{{ post }}</p>
-        <button @click.prevent="testing">test post</button>
     </form>
 </template>
 
@@ -17,43 +15,23 @@
         [x] display image before upload
         [x] upload image to firebase storage
         [x] get imageUrl of uploaded image
-        [ ] build opbject {
-                text,
-                imageUrl,
-                comments
-            }
-            object to contain:
+        [ ] build object:
             {
                 date: firebase date,
                 text_content: string,
                 image_url: string,
                 comments: [ comment_id ]
             }
+        [ ] error responses to be mapped to error messages
+    
     */ 
 
-    import { ref, onMounted } from 'vue';
+    import { ref } from 'vue';
     import { useStore } from 'vuex';
     import { getAuth } from 'firebase/auth';
     import { getStorage, ref as firebaseRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-    import { collection, addDoc } from "firebase/firestore";
+    import { collection, addDoc, Timestamp } from "firebase/firestore";
     import { db } from "../firebase.js";
-
-    async function testing(){
-        console.log(db)
-        console.log(collection);
-        console.log(addDoc);
-        try{
-            const docRef = await addDoc(collection(db, "posts"), {
-                first: "Ada",
-                last: "Lovelace",
-                born: 1815
-            });
-            console.log("Document written with ID: ", docRef.id);
-            console.log("Works")
-        }catch(error){
-            console.log(error)
-        }
-    }
 
     const storage = getStorage();
     const auth = getAuth();
@@ -68,7 +46,6 @@
     function handleImageChange(e){
         if(!e.target.files) return;
         tempFile.value = e.target.files[0];
-        // CHECK THAT FILE READER IS SUPPORTED
         if(FileReader){
             const fr = new FileReader();
             fr.onload = function(){
@@ -106,10 +83,17 @@
                 post.textContent = textInput.value;
                 console.log("text content not empty");
             }
-            if(Object.keys(post).length > 0){
-                post.comments = [];
+            // CHECK THAT POST IS NOT AN EMPTY ONJECT
+            if(Object.keys(post).length === 0){
+                throw {message:"Post empty"};
             }
-            console.table(post)
+            const docRef = await addDoc(collection(db, "posts"), {
+                ...post,
+                date: Timestamp.fromDate( new Date()),
+                userUid:auth.currentUser.uid,
+                comments: []
+            });
+            console.log("Document written with ID: ", docRef.id);
         }catch(error){
             console.log(error)
         }finally{
