@@ -24,6 +24,7 @@ import Loader from './components/Loader.vue';
 import NewPost from './components/NewPost.vue';
 import PostListing from './components/PostListing.vue';
 import Post from './components/Post.vue';
+import Comment from './components/Comment.vue';
 
 // DEFINE ROUTES
 const routes = [
@@ -77,6 +78,7 @@ vueApp.component("Loader", Loader);
 vueApp.component("NewPost", NewPost);
 vueApp.component("PostListing", PostListing);
 vueApp.component("Post", Post);
+vueApp.component("Comment", Comment);
 
 // USE ROUTER, STORE
 vueApp.use(router);

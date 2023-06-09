@@ -42,7 +42,7 @@ const store = createStore({
             const q = query(collection(db, "posts"), where("userUid", "==", auth.currentUser.uid));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach(doc =>{
-                postsArray.push(doc.data());
+                postsArray.push({...doc.data(),id:doc.id});
             })
             context.commit('setPosts', postsArray);
         }

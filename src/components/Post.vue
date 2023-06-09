@@ -3,7 +3,7 @@
         <p>{{ postData.textContent }}</p>
         <img v-if="postData.imageUrl" :src="postData.imageUrl" alt="" class="max-w-[350px]">
         <p><small>{{ formattedDate }}</small></p>
-        <!-- <div v-for="(attribute, index) in postData" :key="index" class="bg-red-100">{{ attribute }}</div> -->
+        <Comment :post-id="postData.id"/>
     </div>
 </template>
 
