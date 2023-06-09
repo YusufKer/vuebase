@@ -60,7 +60,7 @@
         if(!tempFile.value) return;
         const storageRef = firebaseRef(storage, `posts/${auth.currentUser.uid}/${tempFile.value.name}`);
         try{
-            await uploadBytes(storageRef, tempFile);
+            await uploadBytes(storageRef, tempFile.value);
             const url = await getDownloadURL(storageRef);
             imageUrl.value = url;
             console.log({downloadUrl:url})
@@ -88,7 +88,7 @@
             }
             const docRef = await addDoc(collection(db, "posts"), {
                 ...post,
-                date: Timestamp.fromDate( new Date()),
+                date: Timestamp.fromDate(new Date()),
                 userUid:auth.currentUser.uid,
                 comments: []
             });
