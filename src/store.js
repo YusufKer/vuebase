@@ -37,9 +37,6 @@ const store = createStore({
         hideLoader(context){
             context.commit('setLoading', false);
         },
-        setPosts(context, payload){
-            context.commit('setPosts', payload);
-        },
         async getUsersPosts(context){
             const postsArray = [];
             const q = query(collection(db, "posts"), where("userUid", "==", auth.currentUser.uid));
@@ -51,7 +48,6 @@ const store = createStore({
         }
     },
     getters: {
-        getCount: state => state.count,
         getUser: state => state.user,
         getPosts: state => state.posts
     }
