@@ -1,11 +1,17 @@
 import { createStore } from 'vuex';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import { db } from './firebase.js';
+
+const auth = getAuth();
 
 const store = createStore({
     
     state(){
         return {
             user: null,
-            loading: false
+            loading: false,
+            posts: []
         }
     },
 
@@ -15,6 +21,9 @@ const store = createStore({
         },
         setLoading(state, payload){
             state.loading = payload;
+        },
+        setPosts(state, payload){
+            state.posts = payload;
         }
     },
 
@@ -27,12 +36,24 @@ const store = createStore({
         },
         hideLoader(context){
             context.commit('setLoading', false);
+        },
+        setPosts(context, payload){
+            context.commit('setPosts', payload);
+        },
+        async getUsersPosts(context){
+            const postsArray = [];
+            const q = query(collection(db, "posts"), where("userUid", "==", auth.currentUser.uid));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach(doc =>{
+                postsArray.push(doc.data());
+            })
+            context.commit('setPosts', postsArray);
         }
     },
-
     getters: {
         getCount: state => state.count,
-        getUser: state => state.user
+        getUser: state => state.user,
+        getPosts: state => state.posts
     }
 })
 

@@ -1,6 +1,7 @@
 <template>
-    <div>
-        <Post v-for="(post,index) in posts" :key="index" :post-data="post"/>
+    <div class="p-4 bg-yellow-50 grid gap-4">
+        <button @click.prevent="() => store.dispatch('getUsersPosts')" class="bg-red-50 py-2 px-6 rounded-xl">Refresh</button>
+        <Post v-for="(post,index) in store.state.posts" :key="index" :post-data="post"/>
     </div>
 </template>
 
@@ -9,23 +10,14 @@
         TODO:
         [ ] build ui for posts
     */ 
-    import { ref, onMounted } from 'vue';
-    import { collection, query, where, getDocs } from 'firebase/firestore';
-    import { getAuth } from 'firebase/auth';
-    import { db } from "../firebase.js";
+    import { onMounted } from 'vue';
+    import { useStore } from 'vuex';
 
-    const auth = getAuth();
+    const store = useStore();
 
-    const posts = ref([]);
-    
-    onMounted(async()=>{
-        const postsArray = [];
-        const q = query(collection(db, "posts"), where("userUid", "==", auth.currentUser.uid));
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-            postsArray.push(doc.data());
-        });
-        posts.value = postsArray;
+    onMounted(()=>{
+        if(store.state.posts.length > 0) return
+        store.dispatch("getUsersPosts");
     })
 
 </script>

@@ -1,6 +1,6 @@
 <template>
-    <div>
-        {{ postData }}
+    <div class="bg-green-50">
+        <!-- {{ postData }} -->
         <img v-if="postData.imageUrl" :src="postData.imageUrl" alt="">
         <p>{{ postData.textContent }}</p>
     </div>
