@@ -26,14 +26,14 @@
     */ 
     import { ref } from 'vue';
     import { useStore } from 'vuex';
-    import { getAuth } from 'firebase/auth';
     import { getStorage, ref as firebaseRef, uploadBytes, getDownloadURL } from 'firebase/storage';
     import { collection, addDoc, Timestamp } from "firebase/firestore";
     import { db } from "../firebase.js";
 
     const storage = getStorage();
-    const auth = getAuth();
     const store = useStore();
+
+    const currentUser = store.state.user;
 
     const imageSrc = ref("");
     const textInput = ref("");
@@ -58,7 +58,7 @@
 
     async function uploadImage(){
         if(!tempFile.value) return;
-        const storageRef = firebaseRef(storage, `posts/${auth.currentUser.uid}/${tempFile.value.name}`);
+        const storageRef = firebaseRef(storage, `posts/${currentUser.uid}/${tempFile.value.name}`);
         try{
             await uploadBytes(storageRef, tempFile.value);
             const url = await getDownloadURL(storageRef);
@@ -89,7 +89,7 @@
             const docRef = await addDoc(collection(db, "posts"), {
                 ...post,
                 date: Timestamp.fromDate(new Date()),
-                userUid:auth.currentUser.uid,
+                userUid:currentUser.uid,
                 comments: []
             });
             console.log("Document written with ID: ", docRef.id);

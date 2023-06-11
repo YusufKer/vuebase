@@ -3,18 +3,13 @@
     <Loader/>
     <Navbar/>
     <router-view></router-view>
+    {{ store.state.user }}
     <Footer/>
   </div>
 </template>
 
 <script setup>
-  import { useStore } from 'vuex';
-  import { getAuth } from 'firebase/auth';
+  import { useStore } from "./store";
 
-  const auth = getAuth();
   const store = useStore();
-
-  auth.onAuthStateChanged(firebaseUser =>{
-    store.dispatch('signInUser', firebaseUser);
-  })
 </script>

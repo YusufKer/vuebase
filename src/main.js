@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router';
 import { useStore } from './store.js';
+import { getAuth } from 'firebase/auth';
 import './firebase.js'
 
 // IMPORT CSS
@@ -65,8 +66,9 @@ const router = createRouter({
     routes
 })
 
-// Initialize Store
+// Initialize Store & auth 
 const store = useStore();
+const auth = getAuth();
 
 // CREATE VUE APP
 const vueApp = createApp(App);
@@ -83,6 +85,10 @@ vueApp.component("Comment", Comment);
 // USE ROUTER, STORE
 vueApp.use(router);
 vueApp.use(store);
+
+auth.onAuthStateChanged(firebaseUser =>{
+    store.dispatch('signInUser', firebaseUser);
+})
 
 // MOUNT APP
 vueApp.mount('#app')

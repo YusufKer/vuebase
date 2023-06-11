@@ -8,18 +8,26 @@
 
 <script setup>
     import { ref } from 'vue';
-    import { auth } from "firebase/auth";
+    import { useStore } from "../store";
+
+    const store = useStore();
     
     const props = defineProps([
-        'postId'
+        'postId',
+        'comments'
     ])
 
     const commentTextInput = ref("");
 
-    function postComment(){
-        alert("test")
+    async function postComment(){
         if(commentTextInput.value === "") return;
-        const commentObject = {};
-
+        const comments = props.comments;
+        const commentObject = {
+            userUid: store.state.user.uid,
+            userDisplayName:store.state.user.displayName,
+            commentBody: commentTextInput.value
+        };
+        comments.push(commentObject);
     }
+
 </script>

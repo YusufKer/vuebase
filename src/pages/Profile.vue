@@ -41,18 +41,21 @@
         [x] add loading function to prevent user from leaving until file is uploaded or fails
         [x] get url to that file
         [x] update the userInfo profile photo url to point to that file
+        [ ] get user infor from state instead of getAuth function 
  
         ISSUES TO SOLVE:
         [ ] user data (coming from the vue store) is initialised as null. The component renders before user state is loaded
     */ 
-    import { getAuth, updateProfile, updateEmail, sendEmailVerification, updatePhoneNumber } from "firebase/auth";
+    import { getAuth, updateProfile, updateEmail, sendEmailVerification } from "firebase/auth";
     import { getStorage, ref as firebaseRef, uploadBytes, getDownloadURL } from 'firebase/storage';
     import { useStore } from "vuex";
-    import { ref } from 'vue';
+    import { ref, onMounted } from 'vue';
 
     const auth = getAuth();
     const storage = getStorage();
     const store = useStore();
+
+    const currentUser = store.state.user;
 
     const displayNameInput = ref("");
     const emailInput = ref("");
