@@ -1,10 +1,14 @@
 <template>
-    <form @submit.prevent="handleSubmit" class="grid gap-4 max-w-[500px]">
-        <img class="max-w-full" :src="imageSrc" alt="">
-        <input @change="handleImageChange" type="file">
-        <textarea class="p-4" v-model="textInput" name="" id="" cols="30" rows="10"></textarea>
-        <button type="submit" class="bg-yellow-50 py-2 px-6 rounded-xl">Post</button>
-        <p class="bg-red-100">{{ errorText }}</p>
+    <form @submit.prevent="handleSubmit" class="grid grid-cols-2 gap-4 pb-4">
+        <div class="grid gap-4 h-full">
+            <textarea class="p-4" v-model="textInput" name="" id="" cols="30" rows="10"></textarea>
+            <button type="submit" class="bg-yellow-50 py-2 px-6 rounded-xl h-10">Post</button>
+            <p v-if="errorText" class="bg-red-100">{{ errorText }}</p>
+        </div>
+        <div class="grid gap-4">
+            <img class="max-w-full" :src="imageSrc" alt="">
+            <input @change="handleImageChange" class="self-end" type="file">
+        </div>
     </form>
 </template>
 

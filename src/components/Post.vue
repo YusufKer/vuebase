@@ -5,7 +5,7 @@
         <p><small>{{ formattedDate }}</small></p>
         <div class="flex gap-4">
             <Comment :post-id="postData.id" :comments="postData.comments" class="flex-1"/>
-            <button @click="deletePost(postData.id)" class="bg-red-400 px-4 rounded-lg">Delete</button>
+            <button @click="deletePost(postData.id)" class="h-10  bg-red-400 px-4 rounded-lg self-end">Delete</button>
         </div>
     </div>
 </template>
