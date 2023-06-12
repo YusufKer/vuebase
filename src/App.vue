@@ -3,7 +3,6 @@
     <Loader/>
     <Navbar/>
     <router-view></router-view>
-    {{ store.state.user }}
     <Footer/>
   </div>
 </template>

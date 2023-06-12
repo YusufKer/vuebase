@@ -3,7 +3,7 @@
         <div v-for="(comment, index) in formattedComments" :key="index" class="bg-pink-200">
             <p>{{ comment.commentBody }}</p>
             <p><small>{{comment.userDisplayName}} <span class="bg-yellow-50">{{ formatDate(comment.date) }}</span></small></p>
-            <button @click="deleteComment(comment.userUid)" class="bg-red-500 px-4 rounded-full text-white font-bold h-8"><small>Delete</small></button>
+            <button @click="deleteComment(comment.commentId)" class="bg-red-500 px-4 rounded-full text-white font-bold h-8"><small>Delete</small></button>
         </div>
         <form @submit.prevent="postComment" class="grid gap-4">
             <label :for="postId">Comment:</label>
@@ -28,7 +28,7 @@
 
     const formattedComments = computed(() =>{
         const formattedByDate = props.comments.sort((a,b) => a.date.seconds < b.date.seconds)
-        return formattedByDate
+        return formattedByDate;
     })
 
     function formatDate(firebaseDate){
@@ -36,21 +36,33 @@
         return date;
     }
 
-    async function deleteComment(userUid){
-        const postRef = doc(db, "posts", props.postId);
-        console.log("wip...");
-        alert(crypto.randomUUID());
-        return
-        // await updateDoc(postRef. {
-        //     comments: arrayRemove("")
-        // })
+    async function deleteComment(commentId){
+        store.dispatch("showLoader");
+
+        const updateComments = props.comments.filter(comment => comment.commentId !== commentId);
+        const postsRef = doc(db, "posts", props.postId);
+
+        await updateDoc(postsRef, {
+            comments: updateComments
+        })
+        .then(()=>{
+            console.log("success");
+        })
+        .catch(error =>{
+            console.log(error);
+        })
+        .finally(()=>{
+            store.dispatch("hideLoader");
+        })
     }
 
     const commentTextInput = ref("");
 
     async function postComment(){
         if(commentTextInput.value === "") return;
+
         store.dispatch("showLoader");
+        
         const commentObject = {
             userUid: store.state.user.uid,
             userDisplayName:store.state.user.displayName,
