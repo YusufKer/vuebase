@@ -72,19 +72,17 @@
         };
         const postsRef = doc(db, "posts", props.postId);
         
-        await updateDoc(postsRef, {
-            comments: arrayUnion(commentObject)
-        })
-        .then(()=>{
-            console.log("success")
-            commentTextInput.value = "";
-        })
-        .catch(error =>{
-            console.log(error)
-        })
-        .finally(()=>{
-            store.dispatch("hideLoader");
-        })
+        await updateDoc(postsRef, { comments: arrayUnion(commentObject) })
+            .then(()=>{
+                console.log("success")
+                commentTextInput.value = "";
+            })
+            .catch(error =>{
+                console.log(error)
+            })
+            .finally(()=>{
+                store.dispatch("hideLoader");
+            })
     }
 
 </script>
