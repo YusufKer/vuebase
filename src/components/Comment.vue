@@ -3,6 +3,7 @@
         <div v-for="(comment, index) in formattedComments" :key="index" class="bg-pink-200">
             <p>{{ comment.commentBody }}</p>
             <p><small>{{comment.userDisplayName}} <span class="bg-yellow-50">{{ formatDate(comment.date) }}</span></small></p>
+            <button @click="deleteComment(comment.userUid)" class="bg-red-500 px-4 rounded-full text-white font-bold h-8"><small>Delete</small></button>
         </div>
         <form @submit.prevent="postComment" class="grid gap-4">
             <label :for="postId">Comment:</label>
@@ -14,7 +15,7 @@
 
 <script setup>
     import { ref, computed } from 'vue';
-    import { doc, updateDoc, arrayUnion, Timestamp } from "firebase/firestore";
+    import { doc, updateDoc, arrayUnion, arrayRemove, Timestamp } from "firebase/firestore";
     import { db } from '../firebase';
     import { useStore } from "../store";
 
@@ -35,19 +36,28 @@
         return date;
     }
 
+    async function deleteComment(userUid){
+        const postRef = doc(db, "posts", props.postId);
+        console.log("wip...");
+        alert(crypto.randomUUID());
+        return
+        // await updateDoc(postRef. {
+        //     comments: arrayRemove("")
+        // })
+    }
+
     const commentTextInput = ref("");
 
     async function postComment(){
         if(commentTextInput.value === "") return;
         store.dispatch("showLoader");
-        const comments = props.comments;
         const commentObject = {
             userUid: store.state.user.uid,
             userDisplayName:store.state.user.displayName,
             commentBody: commentTextInput.value,
             date: Timestamp.fromDate(new Date()),
+            commentId: crypto.randomUUID()
         };
-        comments.push(commentObject);
         const postsRef = doc(db, "posts", props.postId);
         
         await updateDoc(postsRef, {
