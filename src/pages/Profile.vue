@@ -49,17 +49,16 @@
     import { getAuth, updateProfile, updateEmail, sendEmailVerification } from "firebase/auth";
     import { getStorage, ref as firebaseRef, uploadBytes, getDownloadURL } from 'firebase/storage';
     import { useStore } from "vuex";
-    import { ref, onMounted } from 'vue';
+    import { ref } from 'vue';
 
     const auth = getAuth();
     const storage = getStorage();
     const store = useStore();
 
-    const currentUser = store.state.user;
-
     const displayNameInput = ref("");
     const emailInput = ref("");
     const profileImageSrc = ref("");
+
     let tempFile = null;
 
     async function updateUserDisplayName(){
