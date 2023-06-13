@@ -44,7 +44,8 @@ const store = createStore({
             querySnapshot.forEach(doc =>{
                 postsArray.push({...doc.data(),id:doc.id});
             })
-            context.commit('setPosts', postsArray);
+            const sortedPostsArray = postsArray.sort((a,b) => a.date.seconds > b.date.seconds)
+            context.commit('setPosts', sortedPostsArray);
         }
     },
     getters: {

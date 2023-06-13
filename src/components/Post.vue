@@ -11,7 +11,12 @@
 </template>
 
 <script setup>
+    /*
+        TODO:
+        [ ] when deleting a post, check if post has an image, then delete image from firebasse storage
+    */ 
     import { doc, deleteDoc } from "firebase/firestore";
+    import { getStorage, ref, deleteObject } from "firebase/storage";
     import { computed } from 'vue';
     import { db } from "../firebase";
     import { useStore } from "../store";
@@ -19,10 +24,12 @@
     const props = defineProps([
         'postData'
     ])
+
     const formattedDate = computed(() =>{
         const date = props.postData.date.toDate();
         return date;
     })
+
     const store = useStore();
 
     async function deletePost(postId){
@@ -30,6 +37,17 @@
         await deleteDoc(doc(db, "posts", postId))
             .then(()=>{
                 console.log(`document with id: ${postId} deleted.`)
+                if(!props.postData.imageUrl) return;
+                const storage = getStorage();
+                const fileRef = ref(storage, props.postData.imageUrl);
+                deleteObject(fileRef)
+                    .then(()=>{
+                        console.log("file deleted")
+                    })
+                    .catch(error =>{
+                        console.log(error)
+                    })
+
             })
             .catch(error =>{
                 console.log(error);
